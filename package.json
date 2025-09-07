@@ -4,21 +4,22 @@
   "description": "Ambiente de teste para migração de API usando MCP",
   "main": "index.js",
   "scripts": {
-    "start": "node scripts/automation.js",
-    "agent": "node agent/agent.js",
-    "agent-multi": "node agent/praison-node/cli.js",
-    "agent-advanced": "node agent/praison-node/advanced-cli.js",
     "rest-v1": "node v1.0/rest/server.js",
     "mcp-v1": "node v1.0/mcp/server.js",
     "rest-v1.1": "node v1.1/rest/server.js",
     "mcp-v1.1": "node v1.1/mcp/server.js",
     "start-v1": "concurrently --kill-others --names \"REST,MCP\" --prefix-colors \"blue,green\" \"npm run rest-v1\" \"npm run mcp-v1\"",
     "start-v1.1": "concurrently --kill-others --names \"REST,MCP\" --prefix-colors \"blue,green\" \"npm run rest-v1.1\" \"npm run mcp-v1.1\"",
-    "start-agent-env": "concurrently --kill-others --names \"REST-1.0,MCP-1.0,REST-1.1,MCP-1.1,AGENT\" --prefix-colors \"blue,green,cyan,magenta,yellow\" \"npm run rest-v1\" \"npm run mcp-v1\" \"npm run rest-v1.1\" \"npm run mcp-v1.1\" \"npm run agent\"",
     "test-v1": "node scripts/test-v1.js",
     "test-v1.1": "node scripts/test-v1.1.js",
     "validate-migration": "node scripts/migration-validation.js",
-    "stop-all": "node -e \"const { exec } = require('child_process'); const os = require('os'); const cmd = os.platform() === 'win32' ? 'powershell Get-NetTCPConnection -LocalPort 4000,4001,4002,4003 -State Listen -ErrorAction SilentlyContinue ^| ForEach-Object ^{ Stop-Process -Id $_.OwningProcess -Force -ErrorAction SilentlyContinue ^}' : 'lsof -ti :4000,:4001,:4002,:4003 | xargs -r kill -9'; exec(cmd, (err) => { console.log(err ? 'No processes found' : 'Processes stopped'); });\""
+    "stop-all": "node -e \"const { exec } = require('child_process'); const os = require('os'); const cmd = os.platform() === 'win32' ? 'powershell Get-NetTCPConnection -LocalPort 4000,4001,4002,4003 -State Listen -ErrorAction SilentlyContinue ^| ForEach-Object ^{ Stop-Process -Id $_.OwningProcess -Force -ErrorAction SilentlyContinue ^}' : 'lsof -ti :4000,:4001,:4002,:4003 | xargs -r kill -9'; exec(cmd, (err) => { console.log(err ? 'No processes found' : 'Processes stopped'); });\"",
+    "install-python-deps": "cd agent && pip install -r requirements.txt",
+    "praison-agent": "cd agent && python cli.py",
+    "praison-demo": "cd agent && python praison_bedrock_agent.py",
+    "test-praison": "cd agent && python test_praison_bedrock.py",
+    "praison-math-v1": "concurrently --kill-others --names \"REST-1.0,MCP-1.0,PRAISON\" --prefix-colors \"blue,green,yellow\" \"npm run rest-v1\" \"npm run mcp-v1\" \"npm run praison-agent\"",
+    "praison-math-v1.1": "concurrently --kill-others --names \"REST-1.1,MCP-1.1,PRAISON\" --prefix-colors \"cyan,magenta,yellow\" \"npm run rest-v1.1\" \"npm run mcp-v1.1\" \"npm run praison-agent\""
   },
   "dependencies": {
     "@aws-sdk/client-bedrock-runtime": "^3.883.0",

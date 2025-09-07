@@ -17,6 +17,7 @@ app.post('/sum', (req, res) => {
     }
     
     const result = a + b + c;
+    console.log(`a + b + c = ${a} + ${b} + ${c} = ${result}` )
     
     res.json({ 
       result,

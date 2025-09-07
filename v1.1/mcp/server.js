@@ -14,10 +14,12 @@ server.addTool({
     a: z.number().describe('Primeiro número'),
     b: z.number().describe('Segundo número'),
     c: z.number().describe('Terceiro número')
+      .default(0)
   }),
   execute: async ({ a, b, c }) => {
     try {
       const response = await axios.post('http://localhost:4001/sum', { a, b, c });
+      console.log(`a + b + c = ${a} + ${b} + ${c} = ${response.data}` )
       return JSON.stringify(response.data, null, 2);
     } catch (error) {
       if (error.response) {

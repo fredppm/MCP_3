@@ -17,6 +17,7 @@ server.addTool({
   execute: async ({ a, b }) => {
     try {
       const response = await axios.post('http://localhost:4000/sum', { a, b });
+      console.log(`a + b = ${a} + ${b} = ${response.data}` )
       return JSON.stringify(response.data, null, 2);
     } catch (error) {
       if (error.response) {

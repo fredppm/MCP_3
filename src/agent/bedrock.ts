@@ -5,6 +5,7 @@ export function createLLM() {
   const region = process.env.BEDROCK_AWS_REGION || process.env.AWS_REGION || "us-east-1";
   const temperature = Number(process.env.BEDROCK_TEMPERATURE ?? 0);
 
-  // Credenciais são resolvidas pela AWS SDK default provider chain (env, profile, etc.)
+  // Linha 8:
+  // Credentials are resolved by AWS SDK default provider chain (env, profile, etc.)
   return new ChatBedrockConverse({ model, region, temperature });
 }

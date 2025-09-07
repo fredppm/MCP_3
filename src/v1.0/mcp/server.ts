@@ -4,7 +4,8 @@ import axios, { AxiosError } from 'axios';
 
 const server = new FastMCP({
   name: 'sum-api-v1.0',
-  version: '1.0.0'
+  version: '1.0.0',
+  instructions: 'Adds numbers using the REST API'
 });
 
 interface SumParams {

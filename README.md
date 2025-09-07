@@ -22,17 +22,17 @@ The main objective was to test the behavior of MCP server evolution in a control
 **v1.0 MCP Server:**
 ```javascript
 parameters: z.object({
-  a: z.number().describe('Primeiro número'),
-  b: z.number().describe('Segundo número')
+  a: z.number().describe('First number'),
+  b: z.number().describe('Second number')
 })
 ```
 
 **v1.1 MCP Server:**
 ```javascript
 parameters: z.object({
-  a: z.number().describe('Primeiro número'),
-  b: z.number().describe('Segundo número'),
-  c: z.number().describe('Terceiro número')
+  a: z.number().describe('First number'),
+  b: z.number().describe('Second number'),
+  c: z.number().describe('Third number')
     .default(0) // optional
 })
 ```
@@ -63,6 +63,15 @@ parameters: z.object({
 **Resolution:** Made parameter `c` optional with default value 0
 **Final Result:** ✅ Success after retry
 **Behavior:** Contract mismatch initially prevented execution
+
+*[Space for screenshot]*
+
+### Execution 3.1: v1.1 with --no-default-c Flag (Breaking Changes)
+**Setup:** v1.1 REST + MCP running with `--no-default-c` flag, NEW agent instance
+**Command:** `1+1`
+**Result:** ❌ Tool call rejection (MCP v1.1 requires a, b, c parameters)
+**Behavior:** Demonstrates proper MCP evolution without breaking changes
+**Key Learning:** Using the `--no-default-c` flag ensures backward compatibility by requiring all parameters explicitly, preventing silent failures and maintaining contract integrity during API evolution.
 
 *[Space for screenshot]*
 
@@ -146,12 +155,13 @@ parameters: z.object({
 ### Automated Execution Scenarios
 
 ```bash
-# Run interactive scenario selector (all 7 execution scenarios)
+# Run interactive scenario selector (all 8 execution scenarios)
 npm run run-scenario
-# Quick test for specific scenarios (1-7)
+# Quick test for specific scenarios (1-8)
 npm run quick-test 1    # v1.0 Basic Operation (1+1)
 npm run quick-test 2    # v1.0 with 3-Number Request (1+1+1)
 npm run quick-test 3    # v1.1 with 2-Number Request (1+1)
+npm run quick-test 3.1  # v1.1 with --no-default-c Flag (Breaking Changes)
 npm run quick-test 4    # v1.1 with 3-Number Request (1+1+1)
 npm run quick-test 5    # Hot-Swap During Runtime (v1.0 → v1.1)
 npm run quick-test 6    # Agent Restart During Version Change
@@ -199,15 +209,16 @@ npm run stop-all
 
 ### Execution Scenarios Guide
 
-The `npm run run-scenarios` command provides an interactive menu to run all 7 execution scenarios:
+The `npm run run-scenarios` command provides an interactive menu to run all 8 execution scenarios:
 
 1. **Execution 1**: v1.0 Basic Operation (1+1)
 2. **Execution 2**: v1.0 with 3-Number Request (1+1+1) 
 3. **Execution 3**: v1.1 with 2-Number Request - Without Optional Parameters (1+1)
-4. **Execution 4**: v1.1 with 3-Number Request (1+1+1)
-5. **Execution 5**: Hot-Swap During Runtime (v1.0 → v1.1)
-6. **Execution 6**: Agent Restart During Version Change
-7. **Execution 7**: Rollback Scenario (v1.1 → v1.0) - **Critical Bug Demo**
+4. **Execution 3.1**: v1.1 with --no-default-c Flag (Breaking Changes)
+5. **Execution 4**: v1.1 with 3-Number Request (1+1+1)
+6. **Execution 5**: Hot-Swap During Runtime (v1.0 → v1.1)
+7. **Execution 6**: Agent Restart During Version Change
+8. **Execution 7**: Rollback Scenario (v1.1 → v1.0) - **Critical Bug Demo**
 
 Each scenario automatically:
 - Cleans up existing processes

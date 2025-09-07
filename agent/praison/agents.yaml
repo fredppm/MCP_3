@@ -1,0 +1,51 @@
+framework: "praisonai"
+topic: "Mathematical Operations with MCP Integration"
+
+roles:
+  mcp_coordinator:
+    role: "MCP Coordinator"
+    goal: "Coordinate mathematical operations using MCP v1.0 and v1.1 servers"
+    backstory: "You are an expert in Model Context Protocol (MCP) integration. Your role is to intelligently route mathematical operations to the appropriate MCP server version based on the number of parameters provided."
+    tools:
+      - mcp_v1_tool
+      - mcp_v11_tool
+    
+  math_analyst:
+    role: "Mathematical Analyst"
+    goal: "Analyze mathematical requests and determine the best approach"
+    backstory: "You are a mathematical expert who understands different computational approaches. You analyze user requests and determine whether they require 2-parameter operations (v1.0) or 3-parameter operations (v1.1)."
+    
+  result_presenter:
+    role: "Result Presenter"
+    goal: "Present mathematical results in a clear and user-friendly format"
+    backstory: "You specialize in presenting complex technical results in an accessible way. You take raw computational results and format them for easy understanding."
+
+tasks:
+  analyze_request:
+    description: "Analyze the mathematical request from the user and determine which MCP version is appropriate"
+    agent: math_analyst
+    expected_output: "Analysis of the request indicating whether it's a 2-parameter or 3-parameter operation"
+    
+  execute_calculation:
+    description: "Execute the mathematical calculation using the appropriate MCP server"
+    agent: mcp_coordinator
+    expected_output: "Raw calculation result from the MCP server"
+    
+  present_result:
+    description: "Format and present the final result to the user"
+    agent: result_presenter
+    expected_output: "User-friendly presentation of the calculation result"
+
+tools:
+  mcp_v1_tool:
+    name: "MCP v1.0 Sum Tool"
+    description: "Tool to perform 2-parameter sum operations using MCP v1.0"
+    
+  mcp_v11_tool:
+    name: "MCP v1.1 Sum Tool"
+    description: "Tool to perform 3-parameter sum operations using MCP v1.1"
+
+memory: true
+verbose: true
+allow_delegation: true
+max_iter: 5

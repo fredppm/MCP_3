@@ -1,0 +1,6 @@
+{
+  "permissions": {
+    "allow": ["Bash", "Task", "Read", "Write", "Edit", "MultiEdit", "WebFetch", "WebSearch", "Glob", "Grep", "LS"]
+  },
+  "defaultMode": "bypassPermissions"
+}

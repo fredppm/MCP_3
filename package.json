@@ -6,6 +6,8 @@
   "scripts": {
     "start": "node scripts/automation.js",
     "agent": "node agent/agent.js",
+    "agent-multi": "node agent/praison-node/cli.js",
+    "agent-advanced": "node agent/praison-node/advanced-cli.js",
     "rest-v1": "node v1.0/rest/server.js",
     "mcp-v1": "node v1.0/mcp/server.js",
     "rest-v1.1": "node v1.1/rest/server.js",

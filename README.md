@@ -45,7 +45,7 @@ parameters: z.object({
 **Result:** ✅ Single MCP call, result = 2
 **Behavior:** Expected behavior, direct tool usage
 
-![Alt text](doc\images\scenario1.webp)
+![Alt text](doc/images/scenario1.webp)
 
 ### Execution 2: v1.0 with 3-Number Request
 **Setup:** v1.0 REST + MCP running, agent connected
@@ -54,7 +54,7 @@ parameters: z.object({
 **Actual Result:** ✅ Two chained MCP calls to achieve result = 3
 **Behavior:** Agent intelligently chained two 2-parameter calls: (1+1) + 1 = 3
 
-![Alt text](doc\images\scenario2.webp)
+![Alt text](doc/images/scenario2.webp)
 
 ### Execution 3: v1.1 with 2-Number Request (Initial Failure)
 **Setup:** v1.1 REST + MCP running, NEW agent instance
@@ -64,7 +64,7 @@ parameters: z.object({
 **Final Result:** ✅ Success after retry
 **Behavior:** Contract mismatch initially prevented execution
 
-![Alt text](doc\images\scenario3.webp)
+![Alt text](doc/images/scenario3.webp)
 
 ### Execution 3.1: v1.1 with --no-default-c Flag (Breaking Changes)
 **Setup:** v1.1 REST + MCP running with `--no-default-c` flag, NEW agent instance
@@ -73,7 +73,7 @@ parameters: z.object({
 **Behavior:** Demonstrates proper MCP evolution without breaking changes
 **Key Learning:** Using the `--no-default-c` flag ensures backward compatibility by requiring all parameters explicitly, preventing silent failures and maintaining contract integrity during API evolution.
 
-![Alt text](doc\images\scenario3.1.webp)
+![Alt text](doc/images/scenario3.1.webp)
 
 ### Execution 4: v1.1 with 3-Number Request
 **Setup:** v1.1 REST + MCP running, agent connected
@@ -81,7 +81,7 @@ parameters: z.object({
 **Result:** ✅ Single MCP call, result = 3
 **Behavior:** Optimal behavior, direct tool usage with all parameters
 
-![Alt text](doc\images\scenario4.webp)
+![Alt text](doc/images/scenario4.webp)
 
 ### Execution 5: Hot-Swap During Runtime (v1.0 → v1.1)
 **Setup:** Started with v1.0 REST + MCP, agent active and tested `1+1+1=3` (2 calls)
@@ -90,7 +90,7 @@ parameters: z.object({
 **Result:** ❌ Still used 2 MCP calls instead of optimizing to 1 call
 **Behavior:** Agent did not detect MCP contract change, maintained old calling pattern
 
-![Alt text](doc\images\scenario5.webp)
+![Alt text](doc/images/scenario5.webp)
 
 ### Execution 6: Agent Restart During Version Change
 **Setup:** Agent restarted between v1.0 and v1.1 testing
@@ -99,7 +99,7 @@ parameters: z.object({
 **v1.1 behavior:** 1 call for `1+1+1`
 **Behavior:** Fresh agent instance properly detected new MCP capabilities
 
-![Alt text](doc\images\scenario6.webp)
+![Alt text](doc/images/scenario6.webp)
 
 ### Execution 7: Rollback Scenario (v1.1 → v1.0)
 **Setup:** v1.1 REST + MCP running, agent connected and tested `1+1+1=3`
@@ -108,7 +108,7 @@ parameters: z.object({
 **Result:** ❌ **CRITICAL**: Result = 2 instead of 3!
 **Behavior:** Agent attempted to use 3-parameter call on 2-parameter API, parameter `c` was ignored
 
-![Alt text](doc\images\scenario7.webp)
+![Alt text](doc/images/scenario7.webp)
 
 ## Key Findings
 

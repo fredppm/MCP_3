@@ -5,7 +5,7 @@
 
 import { setTimeout } from 'timers/promises';
 import { confirm } from '@inquirer/prompts';
-import { killProcesses, executeAgent, stopProcess, startV1Services, startV11Services, Services } from './utils.ts';
+import { killProcesses, executeAgent, startV1Services, startV11Services, Services } from './utils.ts';
 
 export async function scenario6(): Promise<void> {
   console.log('\n📋 SCENARIO 6: Agent Restart During Version Change');
@@ -21,8 +21,6 @@ export async function scenario6(): Promise<void> {
   console.log('🚀 Step 2: Starting v1.0 services...');
   let services = await startV1Services();
   
-  // Step 3: Wait for services to be ready
-  console.log('⏳ Step 3: Waiting for services to initialize...');
   await setTimeout(5000);
   
   console.log('\n✅ v1.0 services started!');
@@ -39,11 +37,9 @@ export async function scenario6(): Promise<void> {
     default: true
   });
   
-  // Step 4: Swap to v1.1
-  console.log('\n🔄 Step 4: Swapping to v1.1...');
-  stopProcess(services.rest);
-  stopProcess(services.mcp);
-  await setTimeout(2000);
+  // Step 3: Swap to v1.1
+  console.log('\n🔄 Step 3: Swapping to v1.1...');
+  await killProcesses();
   
   services = await startV11Services();
   await setTimeout(3000);
@@ -73,8 +69,6 @@ export async function scenario6(): Promise<void> {
   
   // Cleanup
   console.log('\n🧹 Cleaning up services...');
-  stopProcess(services.rest);
-  stopProcess(services.mcp);
   await killProcesses();
   
   console.log('✅ Scenario 6 completed!');

@@ -5,7 +5,7 @@
 
 import { setTimeout } from 'timers/promises';
 import { confirm } from '@inquirer/prompts';
-import { killProcesses, executeAgent, stopProcess, startV1Services, startV11Services, Services } from './utils.ts';
+import { killProcesses, executeAgent, startV1Services, startV11Services, createInteractiveAgent } from './utils.ts';
 
 export async function scenario7(): Promise<void> {
   console.log('\n📋 SCENARIO 7: Rollback Scenario (v1.1 → v1.0) - Critical Bug');
@@ -21,8 +21,6 @@ export async function scenario7(): Promise<void> {
   console.log('🚀 Step 2: Starting v1.1 services...');
   let services = await startV11Services();
   
-  // Step 3: Wait for services to be ready
-  console.log('⏳ Step 3: Waiting for services to initialize...');
   await setTimeout(5000);
   
   console.log('\n✅ v1.1 services started!');
@@ -31,7 +29,8 @@ export async function scenario7(): Promise<void> {
   console.log();
   
   // Execute agent with v1.1
-  const agentResultV11 = await executeAgent('1+1+1');
+  const agent = await createInteractiveAgent();
+  const agentResultV11 = await agent.sendCommand('1+1+1');
   console.log('\nPhase 1 Result:', agentResultV11 ? '✅ Success (correct result = 3)' : '❌ Failed');
   
   await confirm({
@@ -39,11 +38,9 @@ export async function scenario7(): Promise<void> {
     default: true
   });
   
-  // Step 4: Rollback to v1.0
-  console.log('\n🔄 Step 4: Rolling back to v1.0...');
-  stopProcess(services.rest);
-  stopProcess(services.mcp);
-  await setTimeout(2000);
+  // Step 3: Rollback to v1.0
+  console.log('\n🔄 Step 3: Rolling back to v1.0...');
+  await killProcesses();
   
   services = await startV1Services();
   await setTimeout(3000);
@@ -66,7 +63,7 @@ export async function scenario7(): Promise<void> {
   console.log();
   
   // Execute agent with v1.0 (should show the bug)
-  const agentResultV1 = await executeAgent('1+1+1');
+  const agentResultV1 = await agent.sendCommand('1+1+1');
   console.log('\nPhase 2 Result:', agentResultV1 ? '⚠️  SUCCESS BUT WRONG RESULT (2 instead of 3 - CRITICAL BUG!)' : '❌ Failed');
   
   await confirm({
@@ -76,8 +73,6 @@ export async function scenario7(): Promise<void> {
   
   // Cleanup
   console.log('\n🧹 Cleaning up services...');
-  stopProcess(services.rest);
-  stopProcess(services.mcp);
   await killProcesses();
   
   console.log('✅ Scenario 7 completed!');

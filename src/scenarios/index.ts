@@ -43,7 +43,7 @@ const scenarios: Scenario[] = [
   },
   {
     id: '3.1',
-    name: 'v1.1 --no-default-c (Avoiding Breaking Changes)',
+    name: 'v1.1 with default value (Avoiding Breaking Changes)',
     description: 'Test proper MCP evolution without breaking changes',
     execute: scenario3_1
   },
@@ -163,8 +163,6 @@ async function runSingleScenario() {
 
   const selectedScenario = scenarios.find(s => s.id === scenarioChoice);
   if (selectedScenario) {
-    console.log(`\n🎬 Running Scenario ${selectedScenario.id}: ${selectedScenario.name}`);
-    console.log('=' .repeat(60));
     await selectedScenario.execute();
   }
 }

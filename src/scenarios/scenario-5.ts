@@ -5,7 +5,7 @@
 
 import { setTimeout } from 'timers/promises';
 import { confirm } from '@inquirer/prompts';
-import { killProcesses, executeAgent, stopProcess, startV1Services, startV11Services, Services } from './utils.ts';
+import { killProcesses, createInteractiveAgent, startV1Services, startV11Services, Services } from './utils.ts';
 
 export async function scenario5(): Promise<void> {
   console.log('\n📋 SCENARIO 5: Hot-Swap Runtime (v1.0 → v1.1)');
@@ -21,8 +21,6 @@ export async function scenario5(): Promise<void> {
   console.log('🚀 Step 2: Starting v1.0 services...');
   let services = await startV1Services();
   
-  // Step 3: Wait for services to be ready
-  console.log('⏳ Step 3: Waiting for services to initialize...');
   await setTimeout(5000);
   
   console.log('\n✅ v1.0 services started!');
@@ -31,7 +29,8 @@ export async function scenario5(): Promise<void> {
   console.log();
   
   // Execute agent with v1.0
-  const agentResultV1 = await executeAgent('1+1+1');
+  const agent = await createInteractiveAgent();
+  const agentResultV1 = await agent.sendCommand('1+1+1');
   console.log('\nPhase 1 Result:', agentResultV1 ? '✅ Success (2 calls expected)' : '❌ Failed');
   
   await confirm({
@@ -41,9 +40,7 @@ export async function scenario5(): Promise<void> {
   
   // Step 4: Hot-swap to v1.1
   console.log('\n🔄 Step 4: Hot-swapping to v1.1...');
-  stopProcess(services.rest);
-  stopProcess(services.mcp);
-  await setTimeout(2000);
+  await killProcesses();
   
   services = await startV11Services();
   await setTimeout(3000);
@@ -58,7 +55,7 @@ export async function scenario5(): Promise<void> {
   console.log();
   
   // Execute agent with v1.1 (should still use old pattern)
-  const agentResultV11 = await executeAgent('1+1+1');
+  const agentResultV11 = await agent.sendCommand('1+1+1');
   console.log('\nPhase 2 Result:', agentResultV11 ? '⚠️  Success but suboptimal (still 2 calls)' : '❌ Failed');
   
   await confirm({
@@ -68,8 +65,6 @@ export async function scenario5(): Promise<void> {
   
   // Cleanup
   console.log('\n🧹 Cleaning up services...');
-  stopProcess(services.rest);
-  stopProcess(services.mcp);
   await killProcesses();
   
   console.log('✅ Scenario 5 completed!');

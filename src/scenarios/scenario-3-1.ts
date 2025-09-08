@@ -5,10 +5,10 @@
 
 import { setTimeout } from 'timers/promises';
 import { confirm } from '@inquirer/prompts';
-import { killProcesses, executeAgent, stopProcess, startV11ServicesNoDefault, Services } from './utils.ts';
+import { killProcesses, executeAgent, startV11Services } from './utils.ts';
 
 export async function scenario3_1(): Promise<void> {
-  console.log('\n📋 SCENARIO 3.1: v1.1 --no-default-c (Avoiding Breaking Changes)');
+  console.log('\n📋 SCENARIO 3.1: v1.1 with default value (Avoiding Breaking Changes)');
   console.log('🎯 Objective: Test proper MCP evolution without breaking changes');
   console.log('📝 Expected: Tool requires all 3 parameters - NO breaking change!');
   console.log();
@@ -17,15 +17,12 @@ export async function scenario3_1(): Promise<void> {
   console.log('🧹 Step 1: Cleaning up existing processes...');
   await killProcesses();
   
-  // Step 2: Start v1.1 services with --no-default-c flag
-  console.log('🚀 Step 2: Starting v1.1 services with --no-default-c flag...');
-  const services = await startV11ServicesNoDefault();
+  // Step 2: Start v1.1 services
+  console.log('🚀 Step 2: Starting v1.1 services...');
+  const services = await startV11Services();
   
-  // Step 3: Wait for services to be ready
-  console.log('⏳ Step 3: Waiting for services to initialize...');
   await setTimeout(5000);
   
-  console.log('\n✅ Setup complete!');
   console.log('\n🤖 Executing agent with command: 1+1');
   console.log('📊 Expected behavior:');
   console.log('   - ❌ Agent cannot call with only 2 parameters');
@@ -54,8 +51,6 @@ export async function scenario3_1(): Promise<void> {
   
   // Cleanup
   console.log('\n🧹 Cleaning up services...');
-  stopProcess(services.rest);
-  stopProcess(services.mcp);
   await killProcesses();
   
   console.log('✅ Scenario 3.1 completed!');

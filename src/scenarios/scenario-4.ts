@@ -5,7 +5,7 @@
 
 import { setTimeout } from 'timers/promises';
 import { confirm } from '@inquirer/prompts';
-import { killProcesses, executeAgent, stopProcess, startV11Services, Services } from './utils.ts';
+import { killProcesses, executeAgent, startV11Services, Services } from './utils.ts';
 
 export async function scenario4(): Promise<void> {
   console.log('\n📋 SCENARIO 4: v1.1 Optimal Operation (1+1+1)');
@@ -21,11 +21,8 @@ export async function scenario4(): Promise<void> {
   console.log('🚀 Step 2: Starting v1.1 services...');
   const services = await startV11Services();
   
-  // Step 3: Wait for services to be ready
-  console.log('⏳ Step 3: Waiting for services to initialize...');
   await setTimeout(5000);
   
-  console.log('\n✅ Setup complete!');
   console.log('\n🤖 Executing agent with command: 1+1+1');
   console.log('📊 Expected behavior:');
   console.log('   - Agent should make exactly 1 MCP call');
@@ -48,8 +45,6 @@ export async function scenario4(): Promise<void> {
   
   // Cleanup
   console.log('\n🧹 Cleaning up services...');
-  stopProcess(services.rest);
-  stopProcess(services.mcp);
   await killProcesses();
   
   console.log('✅ Scenario 4 completed!');
